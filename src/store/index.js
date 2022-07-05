@@ -27,6 +27,7 @@ export default createStore({
     },
     productos: [
       {
+        id: "Yog2331",
         nombre: "Yogurth",
         descripcion: "Sabor manzana descremado",
         precio: 35,
@@ -35,6 +36,7 @@ export default createStore({
         autor: "Isaac",
       },
       {
+        id: "sabr123as",
         nombre: "Sabritas",
         descripcion:
           "Papas fritas adobadas sabor chile jalapeño con un toque se especias",
@@ -44,6 +46,7 @@ export default createStore({
         autor: "Isaac",
       },
       {
+        id: "chur12312",
         nombre: "Churros",
         descripcion: "Churros fritos con azucar y canela",
         precio: 30,
@@ -53,6 +56,7 @@ export default createStore({
       },
     ],
     producto: {
+      id: "",
       nombre: "",
       descripcion: "",
       precio: 0,
@@ -62,6 +66,7 @@ export default createStore({
     },
     proveedores: [
       {
+        id: "wfwwr21",
         nombre: "Juan",
         razonSocial: "IDT",
         telefono: "2228716726",
@@ -72,6 +77,7 @@ export default createStore({
         autor: "Isaac",
       },
       {
+        id: "sad234",
         nombre: "Maria",
         razonSocial: "Evelyn",
         telefono: "2228726726",
@@ -82,6 +88,7 @@ export default createStore({
         autor: "Isaac",
       },
       {
+        id: "asdqwe12",
         nombre: "Rosa",
         razonSocial: "Lomas",
         telefono: "2228456726",
@@ -93,6 +100,7 @@ export default createStore({
       },
     ],
     proveedor: {
+      id: "",
       nombre: "",
       razonSocial: "",
       telefono: "",
@@ -103,7 +111,11 @@ export default createStore({
       autor: "",
     },
   },
-  getters: {},
+  getters: {
+    productoAccedido(state) {
+      return state.producto;
+    },
+  },
   mutations: {
     set(state, payload) {
       state.usuarios.push(payload);
@@ -129,22 +141,10 @@ export default createStore({
       localStorage.setItem("usuarios", JSON.stringify(state.usuarios));
     },
     cargar(state, payload) {
-      if (state.usuarios < 1) {
-        state.usuarios = payload.concat(
-          state.usuarios.splice(0, 1 - state.usuarios.length)
-        );
-      } else {
-        state.productos = payload;
-      }
+      state.usuarios = payload;
     },
     cargarP(state, payload) {
-      if (state.productos < 3) {
-        state.productos = payload.concat(
-          state.productos.splice(0, 3 - state.productos.length)
-        );
-      } else {
-        state.productos = payload;
-      }
+      state.productos = payload;
     },
     setProd(state, payload) {
       var finded = false;
@@ -170,11 +170,16 @@ export default createStore({
       localStorage.setItem("productos", JSON.stringify(state.productos));
     },
     getProd(state, payload) {
-      if (!state.productos.find((item) => item.nombre === payload)) {
+      if (
+        !state.productos.find((item) => item.nombre === payload) &&
+        !state.productos.find((item) => item.id === payload)
+      ) {
         this.$router.push({ path: "/" });
         return;
       }
       state.producto = state.productos.find((item) => item.nombre === payload);
+      if (state.producto === undefined)
+        state.producto = state.productos.find((item) => item.id === payload);
     },
     updateProd(state, payload) {
       var finded = false;
@@ -193,13 +198,7 @@ export default createStore({
     },
 
     cargarProv(state, payload) {
-      if (state.proveedores < 3) {
-        state.proveedores = payload.concat(
-          state.proveedores.splice(0, 3 - state.proveedores.length)
-        );
-      } else {
-        state.proveedores = payload;
-      }
+      state.proveedores = payload;
     },
     setProv(state, payload) {
       var finded = false;
@@ -225,13 +224,18 @@ export default createStore({
       localStorage.setItem("proveedores", JSON.stringify(state.proveedores));
     },
     getProv(state, payload) {
-      if (!state.proveedores.find((item) => item.nombre === payload)) {
+      if (
+        !state.proveedores.find((item) => item.nombre === payload) &&
+        !state.proveedores.find((item) => item.id === payload)
+      ) {
         this.$router.push({ path: "/" });
         return;
       }
       state.proveedor = state.proveedores.find(
         (item) => item.nombre === payload
       );
+      if (state.proveedor === undefined)
+        state.proveedor = state.proveedores.find((item) => item.id === payload);
     },
     updateProv(state, payload) {
       var finded = false;

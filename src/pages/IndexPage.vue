@@ -24,22 +24,92 @@
     <div class="q-pa-md">
       <q-table
         class="my-sticky-header-table"
-        data="usuarios"
         :columns="columns"
+        :rows="usuarios"
         row-key="name"
         flat
         bordered
       >
+        <template #body-cell-nombre="{ row }">
+          <router-link
+            class="text-center text-weight-bold text-body2"
+            style="text-decoration: none; color: inherit"
+            :to="`/${row.id}`"
+            >{{ row.nombre }}</router-link
+          >
+        </template>
+        <template #body-cell-boton="{ row }">
+          <q-btn class="text-grey-8" icon="menu">
+            <q-menu>
+              <div>
+                <q-list style="min-width: 100px">
+                  <q-item clickable v-close-popup @click="editar(row.id)">
+                    <div
+                      class="text-grey-8 q-gutter-md"
+                      style="font-size: 20px"
+                    >
+                      <q-icon class="q-pt-sm" name="edit"></q-icon>
+                    </div>
+                    <q-item-section>Editar Usuario</q-item-section>
+                  </q-item>
+                  <q-item
+                    clickable
+                    v-close-popup
+                    @click="deleteUsuarios(row.id)"
+                  >
+                    <div
+                      class="text-grey-8 q-gutter-ms"
+                      style="font-size: 20px"
+                    >
+                      <q-icon name="delete"></q-icon>
+                    </div>
+                    <q-item-section>Eliminar usuario</q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+            </q-menu>
+          </q-btn>
+        </template>
       </q-table>
+
+      <q-dialog v-model="prompt" persistent>
+        <div>
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Ingresa los datos del usuario</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <FormularioComponent :idUsuario="id"></FormularioComponent>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-dialog>
     </div>
-    <ListarUsuarios></ListarUsuarios>
+    <q-btn @click="probar">Probar</q-btn>
   </q-page>
 </template>
 
 <script>
-import ListarUsuarios from "../components/ListarUsuarios.vue";
+import { ref } from "vue";
+import FormularioComponent from "../components/FormularioComponent.vue";
 import { mapActions, mapState } from "vuex";
+import {
+  setUsuario,
+  eliminarUsuario,
+  getUsuario,
+  updateUsuario,
+  cargarLocalStorageUsuarios,
+} from "../services/UsuarioService";
 export default {
+  setup() {
+    return {
+      alert: ref(false),
+      confirm: ref(false),
+      prompt: ref(false),
+      address: ref(""),
+    };
+  },
   computed: {
     ...mapState(["usuarios"]),
     arrayUsuarios() {
@@ -47,16 +117,34 @@ export default {
       return this.usuarios;
     },
   },
-  ...mapActions(["setUsuarios"]),
+  methods: {
+    ...mapActions(["deleteUsuarios"]),
+    ...mapActions(["setUsuarios"]),
+    probar() {
+      console.log(cargarLocalStorageUsuarios("www.funciona.com", "prueba"));
+    },
+    editar(id) {
+      console.log(`el id recibido es ${id}`);
+      this.id = id;
+      this.prompt = true;
+    },
+  },
   data() {
     return {
+      id: "",
       columns: [
+        {
+          name: "id",
+          required: true,
+          label: "ID",
+          field: "id",
+        },
         {
           name: "usuario",
           required: true,
           label: "USUARIO",
           align: "left",
-          field: (row) => row.name,
+          field: "usuario",
           format: (val) => `${val}`,
           sortable: true,
         },
@@ -88,15 +176,13 @@ export default {
           label: "AUTOR",
           field: "autor",
         },
-        {},
+        { name: "boton" },
       ],
 
       rows: [{ ...this.usuarios }],
     };
   },
-  components: {
-    ListarUsuarios,
-  },
+  components: { FormularioComponent },
 };
 </script>
 

@@ -12,7 +12,11 @@
     </thead>
     <tbody>
       <tr v-for="(producto, index) in productos" :key="index">
-        <td>{{ producto.nombre }}</td>
+        <td>
+          <router-link :to="`/products/${producto.id}`">{{
+            producto.nombre
+          }}</router-link>
+        </td>
         <td>{{ producto.descripcion }}</td>
         <td>{{ producto.precio }}</td>
         <td>{{ producto.fechaRegistro }}</td>

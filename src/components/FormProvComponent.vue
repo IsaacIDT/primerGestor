@@ -81,6 +81,7 @@ export default {
     return {
       regEmail: "",
       proveedorAux: {
+        id: "",
         nombre: "",
         razonSocial: "",
         telefono: "",
@@ -106,10 +107,12 @@ export default {
     },
     procesarFormulario() {
       const todayDate = new Date().toISOString().slice(0, 10);
+      this.proveedorAux.id = shortid.generate();
       this.proveedorAux.fechaRegistro = todayDate;
       this.proveedorAux.status = 200;
       this.proveedorAux.autor = "Isaac";
       const {
+        id,
         nombre,
         razonSocial,
         telefono,
@@ -120,6 +123,7 @@ export default {
         autor,
       } = this.proveedorAux;
       const obj = {
+        id: id,
         nombre: nombre,
         razonSocial: razonSocial,
         telefono: telefono,
@@ -136,6 +140,7 @@ export default {
         this.setProveedores(obj);
       }
       this.proveedorAux = {
+        id: "",
         nombre: "",
         razonSocial: "",
         telefono: "",

@@ -1,7 +1,7 @@
 <template>
   <q-form @submit.prevent="procesarFormulario" class="q-gutter-md">
     <span>PRODUCTOS</span
-    ><q-btn @click="cargarData" v-show="idUsuario != undefined"
+    ><q-btn @click="cargarData" v-show="nameProducto != undefined"
       >Cargar datos previos</q-btn
     >
     <q-input
@@ -75,10 +75,12 @@ export default {
       const todayDate = new Date().toISOString().slice(0, 10);
       this.productoAux.fechaRegistro = todayDate;
       this.productoAux.status = 200;
+      this.productoAux.id = shortid.generate();
       this.productoAux.autor = "Isaac";
-      const { nombre, descripcion, precio, fechaRegistro, status, autor } =
+      const { id, nombre, descripcion, precio, fechaRegistro, status, autor } =
         this.productoAux;
       const obj = {
+        id: id,
         nombre: nombre,
         descripcion: descripcion,
         precio: precio,
@@ -93,6 +95,7 @@ export default {
         this.setProductos(obj);
       }
       this.productoAux = {
+        id: "",
         nombre: "",
         descripcion: "",
         precio: 0,
@@ -103,7 +106,8 @@ export default {
     },
     cargarData() {
       console.log(`Buscando usuario con id ${this.nameProducto}`);
-      this.getProducto(this.nameProducto.trim().toString());
+      this.getProducto(this.nameProducto);
+      console.log(this.producto);
       this.productoAux = this.producto;
       console.log(this.producto);
     },
@@ -113,6 +117,9 @@ export default {
           `El usuario se puedde recibir en el formulario y su id es ${this.nameProducto}`
         );
         this.getProducto(this.nameProducto);
+        console.log("pasa");
+        this.productoAux = this.producto;
+        console.log(this.producto);
       } else {
         console.log("NO hay id");
       }

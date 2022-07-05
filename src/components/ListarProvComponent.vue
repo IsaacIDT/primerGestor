@@ -14,7 +14,11 @@
     </thead>
     <tbody>
       <tr v-for="(proveedor, index) in proveedores" :key="index">
-        <td>{{ proveedor.nombre }}</td>
+        <td>
+          <router-link :to="`/provedores/${proveedor.id}`">{{
+            proveedor.nombre
+          }}</router-link>
+        </td>
         <td>{{ proveedor.razonSocial }}</td>
         <td>{{ proveedor.telefono }}</td>
         <td>{{ proveedor.correo }}</td>
