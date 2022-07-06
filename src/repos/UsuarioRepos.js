@@ -10,6 +10,16 @@ export const get = (url, usuario) => {
   console.log(`Get de usuarios: ${url} - ${usuario}`);
 };
 
+export const getUsers = async () => {
+  try {
+    const res = await fetch("http://localhost:8000/usuarios");
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const update = (url, usuario) => {
   console.log(`Update de usuarios: ${url} - ${usuario}`);
 };

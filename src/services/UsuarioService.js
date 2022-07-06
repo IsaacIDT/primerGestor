@@ -2,6 +2,7 @@ import {
   set,
   eliminar,
   get,
+  getUsers,
   update,
   cargarLocalStorageDeUsuarios,
 } from "../repos/UsuarioRepos";
@@ -20,6 +21,10 @@ export const getUsuario = (url, usuario) => {
 
 export const updateUsuario = (url, usuario) => {
   update(url, usuario);
+};
+
+export const getUsuarios = () => {
+  return getUsers();
 };
 
 export const cargarLocalStorageUsuarios = (url, usuario) => {

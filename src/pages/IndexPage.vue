@@ -98,6 +98,7 @@ import {
   setUsuario,
   eliminarUsuario,
   getUsuario,
+  getUsuarios,
   updateUsuario,
   cargarLocalStorageUsuarios,
 } from "../services/UsuarioService";
@@ -120,8 +121,10 @@ export default {
   methods: {
     ...mapActions(["deleteUsuarios"]),
     ...mapActions(["setUsuarios"]),
-    probar() {
+    async probar() {
       console.log(cargarLocalStorageUsuarios("www.funciona.com", "prueba"));
+      const usuarios2 = await getUsuarios();
+      console.log(usuarios2);
     },
     editar(id) {
       console.log(`el id recibido es ${id}`);
