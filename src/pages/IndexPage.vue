@@ -21,7 +21,7 @@
         class="q-px-md"
       ></q-btn>
     </div>
-    <div class="q-pa-md">
+    <div class="q-pa-md" v-if="dataLista">
       <q-table
         class="my-sticky-header-table"
         :columns="columns"
@@ -55,7 +55,7 @@
                   <q-item
                     clickable
                     v-close-popup
-                    @click="deleteUsuarios(row.id)"
+                    @click="borrar(row.id)"
                   >
                     <div
                       class="text-grey-8 q-gutter-ms"
@@ -95,45 +95,14 @@ import { ref } from "vue";
 import FormularioComponent from "../components/FormularioComponent.vue";
 import { mapActions, mapState } from "vuex";
 import {
-  setUsuario,
   eliminarUsuario,
-  getUsuario,
   getUsuarios,
-  updateUsuario,
   cargarLocalStorageUsuarios,
 } from "../services/UsuarioService";
 export default {
-  setup() {
-    return {
-      alert: ref(false),
-      confirm: ref(false),
-      prompt: ref(false),
-      address: ref(""),
-    };
-  },
-  computed: {
-    ...mapState(["usuarios"]),
-    arrayUsuarios() {
-      console.log(this.usuarios);
-      return this.usuarios;
-    },
-  },
-  methods: {
-    ...mapActions(["deleteUsuarios"]),
-    ...mapActions(["setUsuarios"]),
-    async probar() {
-      console.log(cargarLocalStorageUsuarios("www.funciona.com", "prueba"));
-      const usuarios2 = await getUsuarios();
-      console.log(usuarios2);
-    },
-    editar(id) {
-      console.log(`el id recibido es ${id}`);
-      this.id = id;
-      this.prompt = true;
-    },
-  },
   data() {
     return {
+      dataLista: false,
       id: "",
       columns: [
         {
@@ -181,9 +150,46 @@ export default {
         },
         { name: "boton" },
       ],
-
+      usuarios: [],
       rows: [{ ...this.usuarios }],
     };
+  },
+  setup() {
+    return {
+      alert: ref(false),
+      confirm: ref(false),
+      prompt: ref(false),
+      address: ref(""),
+    };
+  },
+  async mounted() {
+      this.usuarios= await getUsuarios();
+      this.dataLista = true;
+  },
+  computed: {
+    //...mapState(["usuarios"]),
+    arrayUsuarios() {
+      console.log(this.usuarios);
+      return this.usuarios;
+    },
+  },
+  methods: {
+    //...mapActions(["deleteUsuarios"]),
+    ...mapActions(["setUsuarios"]),
+    async probar() {
+      console.log(cargarLocalStorageUsuarios("www.funciona.com", "prueba"));
+      const usuarios2 = await getUsuarios();
+      console.log(usuarios2);
+      this.usuarios = usuarios2;
+    },
+    borrar(id){
+      eliminarUsuario(id);
+    },
+    editar(id) {
+      console.log(`el id recibido es ${id}`);
+      this.id = id;
+      this.prompt = true;
+    },
   },
   components: { FormularioComponent },
 };

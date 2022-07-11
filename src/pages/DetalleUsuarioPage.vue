@@ -1,18 +1,21 @@
 <template>
+<div v-if="dataLista">
   <h1>{{ usuarioAux.nombre }}</h1>
   <h2>{{ usuarioAux.usuario }}</h2>
   <h3>{{ usuarioAux.fechaRegistro }}</h3>
+</div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import { useRoute } from "vue-router";
+import {
+  getUsuario,
+} from "../services/UsuarioService";
 export default {
-  methods: {
-    ...mapActions(["getUsuario"]),
-  },
   data() {
     return {
+      dataLista: false,
       usuarioAux: {
         id: "",
         usuario: "",
@@ -23,13 +26,16 @@ export default {
         fechaRegistro: "",
         autor: "",
       },
+      id: 0,
     };
   },
+  async mounted(){
+    this.usuarioAux = await getUsuario(this.id);
+    this.usuarioAux = this.usuarioAux[0];
+    this.dataLista = true;
+  },
   created() {
-    console.log(useRoute().params.id);
-    this.getUsuario(useRoute().params.id);
-    this.usuarioAux = this.usuario;
-    console.log(this.usuario);
+    this.id = useRoute().params.id;
   },
   computed: {
     ...mapState(["usuario"]),

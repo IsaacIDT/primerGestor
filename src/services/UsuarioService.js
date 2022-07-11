@@ -7,20 +7,20 @@ import {
   cargarLocalStorageDeUsuarios,
 } from "../repos/UsuarioRepos";
 
-export const setUsuario = (url, usuario) => {
-  set(url, usuario);
+export const setUsuario = (usuario) => {
+  set(usuario);
 };
 
-export const eliminarUsuario = (url, usuario) => {
-  eliminar(url, usuario);
+export const eliminarUsuario = (id) => {
+  eliminar(id);
 };
 
-export const getUsuario = (url, usuario) => {
-  get(url, usuario);
+export const getUsuario = (id) => {
+  return get(id);
 };
 
-export const updateUsuario = (url, usuario) => {
-  update(url, usuario);
+export const updateUsuario = (usuario, id) => {
+  update(usuario, id);
 };
 
 export const getUsuarios = () => {

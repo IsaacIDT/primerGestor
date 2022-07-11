@@ -71,16 +71,24 @@
 </template>
 
 <script>
+import {
+  setUsuario,
+  eliminarUsuario,
+  getUsuario,
+  getUsuarios,
+  updateUsuario,
+  cargarLocalStorageUsuarios,
+} from "../services/UsuarioService";
 import { mapState, mapActions } from "vuex";
 import { ref } from "vue";
 const shortid = require("shortid");
 
 export default {
   computed: {
-    ...mapState(["usuario"]),
+    //...mapState(["usuario"]),
   },
   props: {
-    idUsuario: String,
+    idUsuario: Number,
   },
   setup() {
     return {
@@ -129,9 +137,9 @@ export default {
       };
       console.log(obj);
       if (this.idUsuario != undefined) {
-        this.updateUsuario(obj);
+        updateUsuario(obj, this.idUsuario);
       } else {
-        this.setUsuarios(obj);
+        setUsuario(obj);
       }
       this.usuarioAux = {
         id: "",
@@ -150,14 +158,14 @@ export default {
       this.usuarioAux = this.usuario;
       console.log(this.usuario);
     },
-    created() {
+    mounted() {
       if (this.idUsuario != null) {
         console.log(
           `El usuario se puedde recibir en el formulario y su id es ${this.idUsuario}`
         );
         this.getUsuario(idUsuario);
       } else {
-        console.log("NO hay id");
+        console.log("No hay id");
       }
     },
   },
