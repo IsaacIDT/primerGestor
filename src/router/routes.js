@@ -18,6 +18,14 @@ const routes = [
         path: "/provedores/:id",
         component: () => import("pages/DetalleProvPage.vue"),
       },
+      {
+        path: "/marcas/",
+        component: () => import("pages/MarcaPage.vue"),
+      },
+      {
+        path: "/marcas/:id",
+        component: () => import("pages/DetalleMarcaPage.vue"),
+      },
     ],
   },
 

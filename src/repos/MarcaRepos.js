@@ -8,7 +8,7 @@ const headers = {
 };
 let http = axios.create(
   { 
-    baseURL: "http://localhost:8000/usuarios",
+    baseURL: "http://localhost:8000/marcas",
     headers: headers,
     mode: 'cors',
   }
@@ -17,12 +17,14 @@ let http = axios.create(
 
 export const set = (data) => {
   return new Promise((resolve, reject) => {
-    console.log(`Data en el repo del front:  ${JSON.stringify(data)}`)
     http.post(`/create`, {
-      usuario: data.usuario,
-      password: data.password,
-      nombre: data.nombre,
-      correo: data.correo
+      marca_id                  : data.marca_id,
+      nombre                    : data.nombre,
+      registro_fecha            : data.registro_fecha,
+      registro_autor_id         : data.registro_autor_id,
+      actualizacion_fecha       : data.actualizacion_fecha,
+      actualizacion_autor_id    : data.actualizacion_autor_id,
+      status                    : data.status
     }).then( res =>{ 
       console.log('resolve', resolve) 
       console.log('res', res) 
@@ -36,11 +38,14 @@ export const set = (data) => {
 export const update = (data) => {
   return new Promise((resolve, reject) => {
     console.log(`Data en el repo del front:  ${JSON.stringify(data)}`)
-    http.post(`/editar/${data.id}`, {
-      usuario: data.usuario,
-      password: data.password,
-      nombre: data.nombre,
-      correo: data.correo
+    http.post(`/editar/${data.marca_id}`, {
+      marca_id                  : data.marca_id,
+      nombre                    : data.nombre,
+      registro_fecha            : data.registro_fecha,
+      registro_autor_id         : data.registro_autor_id,
+      actualizacion_fecha       : data.actualizacion_fecha,
+      actualizacion_autor_id    : data.actualizacion_autor_id,
+      status                    : data.status
     }).then(respuesta => {
       console.log('resolve ', resolve)
       console.log('res ', respuesta)
@@ -66,7 +71,7 @@ export const eliminar = (id) => {
 
 export const get = (id) => {
   return new Promise((resolve, reject) => {
-    axios.get(`http://localhost:8000/usuarios/${id}`).then(respuesta => {
+    axios.get(`http://localhost:8000/marcas/${id}`).then(respuesta => {
       if(respuesta.status!==200){
         throw respuesta.statusText;
       }
@@ -77,9 +82,9 @@ export const get = (id) => {
 };
 
 
-export const getUsers = async (filtros) => {
+export const getBrands = async (filtros) => {
   return new Promise((resolve, reject) => {
-    axios.get("http://localhost:8000/usuarios").then(respuesta => {
+    axios.get("http://localhost:8000/marcas").then(respuesta => {
       if(respuesta.status!==200)
         throw respuesta.statusText;
       resolve(respuesta.data);
@@ -87,9 +92,4 @@ export const getUsers = async (filtros) => {
   });
 };
 
-export const cargarLocalStorageDeUsuarios = (url, usuario) => {
-  if (localStorage.getItem("usuarios")) {
-    const usuarios = JSON.parse(localStorage.getItem("usuarios"));
-    return usuarios;
-  }
-};
+

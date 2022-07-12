@@ -17,6 +17,7 @@
         <q-btn @click="prompt = true"> Alta de usuarios </q-btn>
         <q-btn @click="promptProd = true"> Alta de productos </q-btn>
         <q-btn @click="promptProv = true"> Alta de provedores </q-btn>
+        <q-btn @click="promptMarcas = true"> Alta de Marcas </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -41,7 +42,7 @@
     <div>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Ingresa los datos del usuario</div>
+          <div class="text-h6">Ingresa los datos del producto</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -55,7 +56,7 @@
     <div>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Ingresa los datos del usuario</div>
+          <div class="text-h6">Ingresa los datos del provedor</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -64,6 +65,21 @@
       </q-card>
     </div>
   </q-dialog>
+
+<q-dialog v-model="promptMarcas" persistent>
+    <div>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Ingresa los datos de la marca</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <FormMarcaComponentVue></FormMarcaComponentVue>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-dialog>
+
 </template>
 
 <script>
@@ -71,6 +87,7 @@ import { defineComponent, ref } from "vue";
 import FormularioComponent from "../components/FormularioComponent.vue";
 import FormProduComponent from "../components/FormProduComponent.vue";
 import FormProvComponent from "../components/FormProvComponent.vue";
+import FormMarcaComponentVue from "src/components/FormMarcaComponent.vue";
 
 export default defineComponent({
   setup() {
@@ -78,11 +95,11 @@ export default defineComponent({
       prompt: ref(false),
       promptProd: ref(false),
       promptProv: ref(false),
-
+      promptMarcas: ref(false),
       address: ref(""),
     };
   },
   name: "MainLayout",
-  components: { FormularioComponent, FormProduComponent, FormProvComponent },
+  components: { FormularioComponent, FormProduComponent, FormProvComponent, FormMarcaComponentVue },
 });
 </script>

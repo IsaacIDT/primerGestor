@@ -16,7 +16,7 @@
       ]"
     /><q-input
       filled
-      v-model="usuarioAux.contraseña"
+      v-model="usuarioAux.password"
       label="Contraseña *"
       type="password"
       hint="Ingresa la contraseña"
@@ -43,6 +43,9 @@
       lazy-rules
       :rules="[(val) => (val && val.length > 15) || 'Please type something']"
     />
+    
+
+<!--     
     <q-select v-model="usuarioAux.status" :options="options" label="Estado" />
     <q-input
       filled
@@ -60,12 +63,12 @@
       hint="Ingresa el Tipo de autor"
       lazy-rules
       :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-    />
+    /> -->
     <!--
         <q-card-actions align="right" class="text-primary"> -->
     <div align="right" class="text-primary">
       <q-btn flat label="Cancel" v-close-popup />
-      <q-btn flat label="Add address" v-close-popup type="submit" />
+      <q-btn flat label="Añadir usuario" v-close-popup type="submit" />
     </div>
   </q-form>
 </template>
@@ -99,64 +102,62 @@ export default {
   data() {
     return {
       usuarioAux: {
-        id: "",
+        id: 0,
         usuario: "",
+        password: "",
         nombre: "",
         correo: "",
-        status: 0,
-        fechaRegistro: "",
-        autor: "",
+        // status: 0,
+        // fechaRegistro: "",
+        // autor: "",
       },
     };
   },
   methods: {
-    ...mapActions(["setUsuarios", "getUsuario", "updateUsuario"]),
+    //...mapActions(["setUsuarios", "getUsuario", "updateUsuario"]),
     procesarFormulario() {
-      if (this.idUsuario === undefined) {
-        this.usuarioAux.id = shortid.generate();
-      }
       const {
         usuario,
         password,
         nombre,
         id,
         correo,
-        status,
-        fechaRegistro,
-        autor,
+        // status,
+        // fechaRegistro,
+        // autor,
       } = this.usuarioAux;
       const obj = {
+        id: id,
         usuario: usuario,
         password: password,
         nombre: nombre,
-        id: id,
         correo: correo,
-        status: status,
-        fechaRegistro: fechaRegistro,
-        autor: autor,
+        // status: status,
+        // fechaRegistro: fechaRegistro,
+        // autor: autor,
       };
       console.log(obj);
       if (this.idUsuario != undefined) {
-        updateUsuario(obj, this.idUsuario);
+        updateUsuario(obj);
       } else {
         setUsuario(obj);
       }
       this.usuarioAux = {
-        id: "",
+        id: 0,
         usuario: "",
         password: "",
         nombre: "",
         correo: "",
-        status: 0,
-        fechaRegistro: "",
-        autor: "",
+        // status: 0,
+        // fechaRegistro: "",
+        // autor: "",
       };
     },
-    cargarData() {
+    async cargarData() {
       console.log(`Buscando usuario con id ${this.idUsuario}`);
-      this.getUsuario(this.idUsuario.trim().toString());
-      this.usuarioAux = this.usuario;
-      console.log(this.usuario);
+      this.usuarioAux = await getUsuario(this.idUsuario);
+      this.usuarioAux = this.usuarioAux[0];
+      console.log(this.usuarioAux);
     },
     mounted() {
       if (this.idUsuario != null) {

@@ -19,8 +19,8 @@ export const getUsuario = (id) => {
   return get(id);
 };
 
-export const updateUsuario = (usuario, id) => {
-  update(usuario, id);
+export const updateUsuario = (usuario) => {
+  update(usuario);
 };
 
 export const getUsuarios = () => {
