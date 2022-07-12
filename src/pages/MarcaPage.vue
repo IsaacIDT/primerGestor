@@ -38,6 +38,19 @@
             >{{ row.nombre }}</router-link
           >
         </template>
+
+        <template #body-cell-registro="{ row }">
+          <q-td class="text-center">
+            {{ row.registro_fecha }} | {{ row.registro_autor_id }}
+          </q-td>
+        </template>
+
+        <template #body-cell-actualizacion="{ row }">   
+          <q-td class="text-center">       
+            {{ row.actualizacion_fecha }} | {{ row.actualizacion_autor_id }}
+          </q-td>
+        </template>
+        
         <template #body-cell-boton="{ row }">
           <q-btn class="text-grey-8" icon="menu">
             <q-menu>
@@ -118,32 +131,20 @@ export default {
           sortable: true,
         },
         {
-          name: "registro_fecha",
-          align: "center",
-          label: "FECHA DE REGISTRO",
-          field: "registro_fecha",
-          sortable: true,
-        },
-        {
-          name: "registro_autor_id",
-          label: "ID DEL AUTOR",
-          field: "registro_autor_id",
-          sortable: true,
-        },
-        {
-          name: "actualizacion_fecha",
-          label: "FECHA DE ACTUALIZACIÓN",
-          field: "actualizacion_fecha",
-        },
-        {
-          name: "actualizacion_autor_id",
-          label: "ID DEL AUTOR QUE ACTUALIZÓ    ",
-          field: "actualizacion_autor_id",
-        },
-        {
           name: "status",
           label: "STATUS",
           field: "status",
+        },
+        {
+          name: "registro",
+          label: "REGISTRO",
+          align: "center"
+        },
+        {
+          name: "actualizacion",
+          label: "ACTUALIZACIÓN",
+          field: "actualizacion",
+          align: "center"
         },
         { name: "boton" },
       ],
