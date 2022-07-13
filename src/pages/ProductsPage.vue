@@ -146,7 +146,6 @@ export default {
   computed: {
     ...mapState(["productos"]),
   },
-  ...mapActions(["setProductos"]),
   data() {
     return {
       nombre: "",
@@ -214,6 +213,7 @@ export default {
   },
   methods: {
     ...mapActions(["deleteProductos"]),
+    ...mapActions(["setProductos"]),
     editar(nombre) {
       console.log(`el nombre recibido es ${nombre}`);
       this.nombre = nombre;

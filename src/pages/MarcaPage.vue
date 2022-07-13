@@ -28,9 +28,6 @@
         :columns="columns"
         :rows="marcas"
         row-key="name"
-        @request = "onRequest"
-        v-model:pagination="pagination"
-        :filter="filter"
         flat
         bordered
       >
@@ -89,10 +86,6 @@
         </template>
       </q-table>
 
-      <div v-for="(elemento, index) in busqueda" :key="index">
-        {{ elemento }}
-      </div>
-
       <q-dialog v-model="carousel" persistent>
         <div>
           <q-card style="min-width: 350px">
@@ -117,7 +110,7 @@
             </q-card-section>
 
             <q-card-section class="q-pt-none">
-              <FormMarcaComponent :idMarca="id"></FormMarcaComponent>
+              <FormMarcaComponent @recargar="recargarEnPadre" :idMarca="id" ></FormMarcaComponent>
             </q-card-section>
           </q-card>
         </div>
@@ -136,21 +129,7 @@ import {
 } from "../services/MarcaService";
 export default {
   setup() {
-    const rows = ref([])
-    const filter = ref('')
-    const loading = ref(false)
-    const pagination = ref({
-      sortBy: 'desc',
-      descending: false,
-      page: 1,
-      rowsPerPage: 3,
-      rowsNumber: 10
-    })
     return {
-      rows,
-      filter,
-      loading,
-      pagination,
       alert: ref(false),
       confirm: ref(false),
       prompt: ref(false),
@@ -167,7 +146,7 @@ export default {
   data() {
     return {
       dataLista: false,
-      id: "",
+      id: "", ///////////////prop a enviar
       columns: [
         {
           name: "marca_id",
@@ -203,12 +182,12 @@ export default {
         { name: "boton" },
       ],
       marcas: [],
-      busqueda: [],
-      //rows: [{ ...this.marcas }],
+      rows: [],
     };
   },
   async mounted() {
       this.marcas= await getMarcas();
+      this.rows = this.marcas;
       this.dataLista = true;
   },
   methods: {
@@ -216,21 +195,29 @@ export default {
     mostrar() {
       this.carousel = true;
     },
+    async recargarEnPadre(){
+      console.log("llega en padre")
+      try{
+        this.marcas = await getMarcas();
+        this.rows = this.marcas;
+        this.prompt = false;
+      }catch(e){
+        console.log(e)
+      }
+    },
     buscandoEnPadre(objeto) {
       if (objeto.opc === 1) {
         const busqueda = this.marcas.filter(
           (marca) =>
             marca.nombre.includes(objeto.dato)
         );
-        this.busqueda = busqueda;
-        console.log(busqueda);
+          this.marcas = busqueda;
       } else {
         if (objeto.opc === 2) {
           const busqueda = this.marcas.filter(
             (marca) => marca.status === parseInt(objeto.dato)
           );
-          this.busqueda = busqueda;
-          console.log(busqueda);
+          this.marcas = busqueda;
         } else {
           var busqueda = [];
           const start = new Date(objeto.dato[0]);
@@ -241,8 +228,7 @@ export default {
               busqueda.push(marca);
             }
           });
-          this.busqueda = busqueda;
-          console.log(busqueda);
+          this.marcas = busqueda;
         }
       }
     },
@@ -251,9 +237,14 @@ export default {
 
     },
     async borrar(id){
-      await eliminarMarca(id);
-      this.marcas = await getMarcas();
-      this.onRequest({filter: this.marcas})
+      try{
+        await eliminarMarca(id);
+        this.marcas =  await getMarcas();
+        this.rows = this.marcas;
+      }catch(e){
+        console.log(e)
+      }finally{
+      }
     },
     editar(id) {
       console.log(`el id recibido es ${id}`);

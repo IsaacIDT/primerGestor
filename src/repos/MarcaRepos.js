@@ -26,11 +26,9 @@ export const set = (data) => {
       actualizacion_autor_id    : data.actualizacion_autor_id,
       status                    : data.status
     }).then( res =>{ 
-      console.log('resolve', resolve) 
-      console.log('res', res) 
+      resolve({message: `done ${res}`});
     }).catch(error => { 
-      console.log('error', error)
-      console.log(reject)
+      reject({reagin: `'cause : ${error}`});
     });
   });
 };
@@ -47,12 +45,10 @@ export const update = (data) => {
       actualizacion_autor_id    : data.actualizacion_autor_id,
       status                    : data.status
     }).then(respuesta => {
-      console.log('resolve ', resolve)
-      console.log('res ', respuesta)
+      resolve({message: `done ${respuesta}`})
       //resolve(respuesta.data);
     }).catch(error => {
-      console.log('error', error)
-      console.log(reject)
+      reject({reagin: `'cause : ${error}`});
     });
   });
 };
@@ -60,11 +56,9 @@ export const update = (data) => {
 export const eliminar = (id) => {
   return new Promise((resolve, reject) => {
     http.delete(`/${id}`).then( res =>{ 
-      console.log('resolve', resolve) 
-      console.log('res', res) 
+      resolve({message: `done ${res}`})
     }).catch(error => { 
-      console.log('error', error)
-      console.log(reject)
+      reject({reagin: `'cause : ${error}`});
     });
   });
 }
@@ -77,7 +71,9 @@ export const get = (id) => {
       }
       console.log('usuario', respuesta);
       resolve(respuesta.data);
-    }).catch(error => console.log('error', error));
+    }).catch(error => {
+      reject({reagin: `'cause : ${error}`});
+    });
   });
 };
 
@@ -88,7 +84,9 @@ export const getBrands = async (filtros) => {
       if(respuesta.status!==200)
         throw respuesta.statusText;
       resolve(respuesta.data);
-    }).catch(error => console.log('error', error));
+    }).catch(error => {
+      reject({reagin: `'cause : ${error}`});
+    });
   });
 };
 

@@ -1,8 +1,6 @@
 <template>
-  <q-form @submit.prevent="procesarFormulario" class="q-gutter-md">
+  <q-form @submit.prevent="procesarFormulario" class="q-gutter-md" v-if="dataLista">
     <span>{{ idMarca }}</span
-    ><q-btn @click="cargarData" v-show="idMarca != undefined"
-      >Cargar datos previos</q-btn
     >
     <q-input
       filled
@@ -57,7 +55,20 @@
         <q-card-actions align="right" class="text-primary"> -->
     <div align="right" class="text-primary">
       <q-btn flat label="Cancel" v-close-popup />
-      <q-btn flat label="Añadir marca" v-close-popup type="submit" />
+      <q-btn flat label="Añadir marca" type="submit" :disabled="(this.marcaAux.registro_fecha.length === 0 || 
+                                                                this.marcaAux.registro_autor_id.length === 0 ||
+                                                                this.marcaAux.actualizacion_fecha.length === 0  ||
+                                                                this.marcaAux.actualizacion_autor_id.length === 0  ||
+                                                                this.marcaAux.status.length === 0 ||
+                                                                this.marcaAux.nombre.length === 0)" />
+    </div>
+    <div>
+    {{ marcaAux.nombre.length }}
+    {{ marcaAux.registro_fecha.length }}
+    {{ marcaAux.registro_autor_id.length }}
+    {{ marcaAux.actualizacion_fecha.length }}
+    {{ marcaAux.actualizacion_autor_id.length }}
+    {{ marcaAux.status.length }}
     </div>
   </q-form>
 </template>
@@ -85,6 +96,7 @@ export default {
   },
   data() {
     return {
+      dataLista : false,
       marcaAux: {
         marca_id: "",
         nombre: "",
@@ -95,6 +107,24 @@ export default {
         status: 0,
       },
     };
+  },
+
+  async mounted() {
+    if (this.idMarca != undefined) {
+      console.log(
+        `La marca se puedde recibir en el formulario y su id es ${this.idMarca}`
+      );
+
+      this.marcaAux = await getMarca(this.idMarca);
+      this.marcaAux = this.marcaAux[0];
+      this.dataLista=true;
+      //this.getMarca(idMarca);
+    } else {
+      console.log("No hay id");
+      this.dataLista=true;
+    }
+  },
+  computed: {
   },
   methods: {
     async procesarFormulario() {
@@ -121,37 +151,25 @@ export default {
         actualizacion_autor_id: actualizacion_autor_id,
         status: status,
       };
-      if (this.idMarca != undefined) {
-        await updateMarca(obj);
-        window.location.reload();
-      } else {
-        await setMarca(obj);
-        window.location.reload();
-      }
-      this.marcaAux = {
-        marca_id: "",
-        nombre: "",
-        registro_fecha: "",
-        registro_autor_id: "",
-        actualizacion_fecha: "",
-        actualizacion_autor_id: "",
-        status: 0,
-      };
-    },
-    async cargarData() {
-      console.log(`Buscando marca con id ${this.idMarca}`);
-      this.marcaAux = await getMarca(this.idMarca);
-      this.marcaAux = this.marcaAux[0];
-      console.log(this.marcaAux);
-    },
-    mounted() {
-      if (this.idMarca != null) {
-        console.log(
-          `La marca se puedde recibir en el formulario y su id es ${this.idMarca}`
-        );
-        this.getMarca(idMarca);
-      } else {
-        console.log("No hay id");
+      try{
+        if (this.idMarca != undefined) {
+          await updateMarca(obj);
+        } else {
+          await setMarca(obj); /////////////se tiene que recibir el emit en el layout
+        }
+        this.marcaAux = {
+          marca_id: "",
+          nombre: "",
+          registro_fecha: "",
+          registro_autor_id: "",
+          actualizacion_fecha: "",
+          actualizacion_autor_id: "",
+          status: 0,
+        };
+        console.log("llega en hijo")
+        this.$emit("recargar");
+      }catch(e){
+        console.log(e)
       }
     },
   },

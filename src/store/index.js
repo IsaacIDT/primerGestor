@@ -110,17 +110,22 @@ export default createStore({
       status: 0,
       autor: "",
     },
+    marcasState: [],
   },
+
+
   getters: {
     productoAccedido(state) {
       return state.producto;
     },
   },
   mutations: {
+    marcasSet(state, payload){
+      state.marcasState = payload;
+    },
     set(state, payload) {
       state.usuarios.push(payload);
       console.log(state.usuarios);
-      localStorage.setItem("usuarios", JSON.stringify(state.usuarios));
     },
     eliminar(state, payload) {
       state.usuarios = state.usuarios.filter((item) => item.id !== payload);
@@ -273,6 +278,9 @@ export default createStore({
     },
     setUsuarios({ commit }, usuario) {
       commit("set", usuario);
+    },
+    setBrands({commit}, marcas){
+      commit("marcasSet", marcas);
     },
     deleteUsuarios({ commit }, id) {
       commit("eliminar", id);
