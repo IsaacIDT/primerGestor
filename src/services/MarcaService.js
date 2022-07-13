@@ -11,7 +11,7 @@ export const setMarca = (marca) => {
   };
   
   export const eliminarMarca = (id) => {
-    eliminar(id);
+    return eliminar(id);
   };
   
   export const getMarca = (id) => {

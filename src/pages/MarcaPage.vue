@@ -19,6 +19,7 @@
         rounded
         color="grey"
         class="q-px-md"
+        @click="mostrar"
       ></q-btn>
     </div>
     <div class="q-pa-md" v-if="dataLista">
@@ -27,6 +28,9 @@
         :columns="columns"
         :rows="marcas"
         row-key="name"
+        @request = "onRequest"
+        v-model:pagination="pagination"
+        :filter="filter"
         flat
         bordered
       >
@@ -85,6 +89,26 @@
         </template>
       </q-table>
 
+      <div v-for="(elemento, index) in busqueda" :key="index">
+        {{ elemento }}
+      </div>
+
+      <q-dialog v-model="carousel" persistent>
+        <div>
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Ingresa los datos de la marca</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <BusquedaMarcaComponent
+                @buscar="buscandoEnPadre"
+              ></BusquedaMarcaComponent>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-dialog>
+
       <q-dialog v-model="prompt" persistent>
         <div>
           <q-card style="min-width: 350px">
@@ -105,11 +129,41 @@
 <script>
 import { ref } from "vue";
 import FormMarcaComponent from "../components/FormMarcaComponent.vue";
+import BusquedaMarcaComponent from "src/components/BusquedaMarcaComponent.vue";
 import {
   eliminarMarca,
   getMarcas,
 } from "../services/MarcaService";
 export default {
+  setup() {
+    const rows = ref([])
+    const filter = ref('')
+    const loading = ref(false)
+    const pagination = ref({
+      sortBy: 'desc',
+      descending: false,
+      page: 1,
+      rowsPerPage: 3,
+      rowsNumber: 10
+    })
+    return {
+      rows,
+      filter,
+      loading,
+      pagination,
+      alert: ref(false),
+      confirm: ref(false),
+      prompt: ref(false),
+      address: ref(""),
+      carousel: ref(false),
+      card: ref(false),
+      sliders: ref(false),
+
+      slide: ref(1),
+      lorem:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!",
+    };
+  },
   data() {
     return {
       dataLista: false,
@@ -149,32 +203,57 @@ export default {
         { name: "boton" },
       ],
       marcas: [],
-      rows: [{ ...this.marcas }],
-    };
-  },
-  setup() {
-    return {
-      alert: ref(false),
-      confirm: ref(false),
-      prompt: ref(false),
-      address: ref(""),
+      busqueda: [],
+      //rows: [{ ...this.marcas }],
     };
   },
   async mounted() {
       this.marcas= await getMarcas();
       this.dataLista = true;
   },
-//   computed: {
-//     //...mapState(["usuarios"]),
-//     array() {
-//       console.log(this.usuarios);
-//       return this.usuarios;
-//     },
-//   },
   methods: {
     //...mapActions(["deleteUsuarios"]),
-    borrar(id){
-      eliminarMarca(id);
+    mostrar() {
+      this.carousel = true;
+    },
+    buscandoEnPadre(objeto) {
+      if (objeto.opc === 1) {
+        const busqueda = this.marcas.filter(
+          (marca) =>
+            marca.nombre.includes(objeto.dato)
+        );
+        this.busqueda = busqueda;
+        console.log(busqueda);
+      } else {
+        if (objeto.opc === 2) {
+          const busqueda = this.marcas.filter(
+            (marca) => marca.status === parseInt(objeto.dato)
+          );
+          this.busqueda = busqueda;
+          console.log(busqueda);
+        } else {
+          var busqueda = [];
+          const start = new Date(objeto.dato[0]);
+          const end = new Date(objeto.dato[1]);
+          this.marcas.forEach((marca) => {
+            var date = new Date(marca.registro_fecha);
+            if (date > start && date < end) {
+              busqueda.push(marca);
+            }
+          });
+          this.busqueda = busqueda;
+          console.log(busqueda);
+        }
+      }
+    },
+    onRequest(props){
+      const {filter} = props.filter;
+
+    },
+    async borrar(id){
+      await eliminarMarca(id);
+      this.marcas = await getMarcas();
+      this.onRequest({filter: this.marcas})
     },
     editar(id) {
       console.log(`el id recibido es ${id}`);
@@ -182,7 +261,7 @@ export default {
       this.prompt = true;
     },
   },
-  components: { FormMarcaComponent },
+  components: { FormMarcaComponent, BusquedaMarcaComponent },
 };
 </script>
 
