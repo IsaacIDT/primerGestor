@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-ma-xl">
+    <h2>Marcas</h2>
     <div class="row q-mx-lg">
       <q-input outlined filled class="q-pr-md" label="Buscar palabra clave">
         <template v-slot:prepend>
@@ -231,10 +232,6 @@ export default {
           this.marcas = busqueda;
         }
       }
-    },
-    onRequest(props){
-      const {filter} = props.filter;
-
     },
     async borrar(id){
       try{

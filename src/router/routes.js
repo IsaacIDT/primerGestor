@@ -26,6 +26,14 @@ const routes = [
         path: "/marcas/:id",
         component: () => import("pages/DetalleMarcaPage.vue"),
       },
+      {
+        path: "/perfiles/",
+        component: () => import("pages/PerfilPage.vue"),
+      },
+      {
+        path: "/perfiles/:id",
+        component: ()  => import("pages/DetallePerfilPage.vue")
+      },
     ],
   },
 
