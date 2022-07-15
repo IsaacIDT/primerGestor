@@ -34,6 +34,14 @@ const routes = [
         path: "/perfiles/:id",
         component: ()  => import("pages/DetallePerfilPage.vue")
       },
+      {
+        path: "/categorias/",
+        component: () => import("pages/CategoriaPage.vue")
+      },
+      {
+        path: "/categorias/:id",
+        component: () => import("pages/DetalleCategoriaPage.vue")
+      }
     ],
   },
 

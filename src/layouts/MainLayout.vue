@@ -24,7 +24,8 @@
                   </q-item>
                   <q-item clickable>
                     <q-item-section>
-                      <router-link style="text-decoration: none; color: inherit;" to="/provedores">Provedores</router-link>
+                      <router-link style="text-decoration: none; color: inherit;" to="/provedores">Provedores
+                      </router-link>
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
@@ -35,6 +36,12 @@
                   <q-item clickable>
                     <q-item-section>
                       <router-link style="text-decoration: none; color: inherit;" to="/perfiles">Perfiles</router-link>
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable>
+                    <q-item-section>
+                      <router-link style="text-decoration: none; color: inherit;" to="/categorias">Categorias
+                      </router-link>
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -49,10 +56,11 @@
         <q-btn @click="promptProv = true"> Alta de provedor </q-btn>
         <q-btn @click="promptMarcas = true"> Alta de Marca </q-btn>
         <q-btn @click="promptPerfiles = true"> Alta de Perfil </q-btn>
+        <q-btn @click="promptCategorias = true"> Alta de Categorias </q-btn>
       </q-toolbar>
     </q-header>
 
-  <!-- RECARGAR ROUTER VIEWWWWWWWWWWWW-->
+    <!-- RECARGAR ROUTER VIEWWWWWWWWWWWW-->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -100,7 +108,7 @@
     </div>
   </q-dialog>
 
-<q-dialog v-model="promptMarcas" persistent>
+  <q-dialog v-model="promptMarcas" persistent>
     <div>
       <q-card style="min-width: 350px">
         <q-card-section>
@@ -108,25 +116,39 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <FormMarcaComponentVue @recargar="recargarEnMenu" ></FormMarcaComponentVue>
+          <FormMarcaComponent @recargar="recargarEnMenu"></FormMarcaComponent>
         </q-card-section>
       </q-card>
     </div>
   </q-dialog>
 
   <q-dialog v-model="promptPerfiles" persistent>
-        <div>
-          <q-card style="min-width: 350px">
-            <q-card-section>
-              <div class="text-h6">Ingresa los datos del perfil </div>
-            </q-card-section>
+    <div>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Ingresa los datos del perfil </div>
+        </q-card-section>
 
-            <q-card-section class="q-pt-none">
-              <FormPerfilComponent></FormPerfilComponent>
-            </q-card-section>
-          </q-card>
-        </div>
-      </q-dialog>
+        <q-card-section class="q-pt-none">
+          <FormPerfilComponent @recargar="recargarEnMenu"></FormPerfilComponent>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-dialog>
+
+  <q-dialog v-model="promptCategorias" persistent>
+    <div>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Ingresa los datos de la categoria </div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <FormCatComponent @recargar="recargarEnMenu"></FormCatComponent>
+        </q-card-section>
+      </q-card>
+    </div>
+  </q-dialog>
 </template>
 
 <script>
@@ -134,8 +156,9 @@ import { ref } from "vue";
 import FormularioComponent from "../components/FormularioComponent.vue";
 import FormProduComponent from "../components/FormProduComponent.vue";
 import FormProvComponent from "../components/FormProvComponent.vue";
-import FormMarcaComponentVue from "src/components/FormMarcaComponent.vue";
+import FormMarcaComponent from "src/components/FormMarcaComponent.vue";
 import FormPerfilComponent from "src/components/FormPerfilComponent.vue";
+import FormCatComponent from "src/components/FormCatComponent.vue";
 
 export default {
   setup() {
@@ -145,15 +168,16 @@ export default {
       promptProv: ref(false),
       promptMarcas: ref(false),
       promptPerfiles: ref(false),
+      promptCategorias: ref(false),
       address: ref(""),
     };
   },
-  methods:{
-    recargarEnMenu(){
+  methods: {
+    recargarEnMenu() {
       console.log("llega al layout")
-      this.promptPerfiles = false;
+      this.promptCategorias = this.promptMarcas = this.promptPerfiles = false;
     }
   },
-  components: { FormularioComponent, FormProduComponent, FormProvComponent, FormMarcaComponentVue, FormPerfilComponent },
+  components: { FormularioComponent, FormProduComponent, FormProvComponent, FormMarcaComponent, FormPerfilComponent, FormCatComponent },
 };
 </script>

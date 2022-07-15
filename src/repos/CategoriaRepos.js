@@ -8,7 +8,7 @@ const headers = {
 };
 let http = axios.create(
   { 
-    baseURL: "http://localhost:8000/perfiles",
+    baseURL: "http://localhost:8000/categorias",
     headers: headers,
     mode: 'cors',
   }
@@ -19,11 +19,9 @@ export const set = (data) => {
   return new Promise((resolve, reject) => {
     console.log(`Data en el repo del front:  ${JSON.stringify(data)}`)
     http.post(`/create`, {
-      perfil_id                  : data.perfil_id,
+      categoria_id                  : data.categoria_id,
       nombre                    : data.nombre,
-      clave                     : data.clave,
-      descripcion               : data.descripcion,
-      registro_fecha            : data.registro_fecha,
+      //registro_fecha            : data.registro_fecha,
       registro_autor_id         : data.registro_autor_id,
     }).then( res =>{ 
       resolve({message: `done ${res}`});
@@ -36,10 +34,8 @@ export const set = (data) => {
 export const update = (data) => {
   return new Promise((resolve, reject) => {
     console.log(`Data en el repo del front:  ${JSON.stringify(data)}`)
-    http.post(`/editar/${data.perfil_id}`, {
+    http.post(`/editar/${data.categoria_id}`, {
       nombre                    : data.nombre,
-      clave                     : data.clave,
-      descripcion               : data.descripcion,
       actualizacion_fecha       : data.actualizacion_fecha,
       actualizacion_autor_id    : data.actualizacion_autor_id,
     }).then(respuesta => {
@@ -63,7 +59,7 @@ export const eliminar = (id) => {
 
 export const get = (id) => {
   return new Promise((resolve, reject) => {
-    axios.get(`http://localhost:8000/perfiles/${id}`).then(respuesta => {
+    axios.get(`http://localhost:8000/categorias/${id}`).then(respuesta => {
       if(respuesta.status!==200){
         throw respuesta.statusText;
       }
@@ -76,9 +72,9 @@ export const get = (id) => {
 };
 
 
-export const getProfiles = async () => {
+export const getCategories = async () => {
   return new Promise((resolve, reject) => {
-    axios.get("http://localhost:8000/perfiles").then(respuesta => {
+    axios.get("http://localhost:8000/categorias").then(respuesta => {
       if(respuesta.status!==200)
         throw respuesta.statusText;
       resolve(respuesta.data);
